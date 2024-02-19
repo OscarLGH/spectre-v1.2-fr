@@ -26,11 +26,22 @@ char* secret = "The Magic Words are Squeamish Ossifrage.";
 
 uint8_t temp = 0; /* Used so compiler won't optimize out victim_function() */
 
+/* readonly address */
+void unused_function()
+{
+
+}
+
 void victim_function(size_t x)
 {
+	long tmp;
+	long *p;
+  	p = (x < array1_size ? &tmp : (long *)unused_function);
+
 	if (x < array1_size)
 	{
-		temp &= array2[array1[x] * 512];
+		*p = x;
+		temp &= array2[array1[*p] * 512];
 	}
 }
 
